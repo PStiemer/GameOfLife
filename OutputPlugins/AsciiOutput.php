@@ -12,7 +12,7 @@ class AsciiOutput extends BaseOutput
         $this->width = $_width;
     }
 
-    function name()
+    function buttonName()
     {
         return "Ascii";
     }

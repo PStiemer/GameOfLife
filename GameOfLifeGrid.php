@@ -2,6 +2,9 @@
     <p>Waehlen sie die Startpositionen:</p>
 
 <?php
+include "AllInclude.php";
+$includer = new AllInclude();
+$includer->AllInclude();
 $height = $_POST["height"];
 $width = $_POST["width"];
 

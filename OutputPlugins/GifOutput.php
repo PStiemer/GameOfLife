@@ -22,7 +22,7 @@ class GifOutput extends BaseOutput
         $this->textColor = imagecolorallocate($this->im, 255, 255, 255);
     }
 
-    function name()
+    function buttonName()
     {
         return "Gif";
     }
