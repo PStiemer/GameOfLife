@@ -1,7 +1,7 @@
 <?php
-class AllInclude
+class ClassLoader
 {
-    public function AllInclude()
+    public function ClassLoader()
     {
         include_once "BaseOutput.php";
 
@@ -15,5 +15,6 @@ class AllInclude
             $i++;
         }
         while (isset($files[$i])) ;
+        return $files;
     }
 }

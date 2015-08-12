@@ -1,12 +1,14 @@
 <form action="GameOfLife.php" method="post">
     <p>Waehlen sie die Startpositionen:</p>
-
 <?php
-include "AllInclude.php";
-$includer = new AllInclude();
-$includer->AllInclude();
+include "ClassLoader.php";
+$includer = new ClassLoader();
+$files = $includer->ClassLoader();
+
 $height = $_POST["height"];
 $width = $_POST["width"];
+
+echo "<input type=hidden name=height value=$height/><input type=hidden name=width value=$width/>";
 
 for($w = 0; $w < $width; $w++)
 {
@@ -16,9 +18,20 @@ for($w = 0; $w < $width; $w++)
     }
     echo "<br />";
 }
-    echo "<input type=hidden name=height value=$height />";
-    echo "<input type=hidden name=width value=$width />";
+echo "<p>Ausgabeformat:</p>";
+foreach($files as $file)
+{
+    $className = str_replace(".php", "", $file);
+    $outputPlugin = new $className($height, $width); //TODO: Constructor at this point unnecessary
+    if ($outputPlugin instanceof BaseOutput)
+    {
+        $var = $outputPlugin->buttonName();
+        echo "<input type=submit name=$var value=$var>";
+    }
+    else
+    {
+        echo "Fatal Error: Du dumme Nuss hast das OutputPlugin nicht von BaseOutput abgeleitet!";
+    }
+}
 ?>
-    <p>Ausgabeformat: <input type="submit" name="Ascii" value="Ascii"/> <input type="submit" name="Gif" value="Gif"</p>
-    </form>
-
+</form>

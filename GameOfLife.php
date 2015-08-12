@@ -1,11 +1,19 @@
 <?php
-include "AllInclude.php";
-$includer = new AllInclude();
-$includer->AllInclude();
+include "ClassLoader.php";
+$includer = new ClassLoader();
+$includer->ClassLoader();
 
 $height = $_POST["height"];
 $width = $_POST["width"];
-$startPos = $_POST["checkbox"];
+
+if(isset($_POST["checkbox"]))
+{
+    $startPos = $_POST["checkbox"];
+}
+else
+{
+    $startPos[0][0] = 0;
+}
 
 if (isset($_POST['Ascii']))
 {
