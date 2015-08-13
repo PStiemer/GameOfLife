@@ -1,7 +1,7 @@
 <?php
 include "ClassLoader.php";
 $includer = new ClassLoader();
-$includer->ClassLoader();
+$includer->loadAll();
 
 $height = $_POST["height"];
 $width = $_POST["width"];

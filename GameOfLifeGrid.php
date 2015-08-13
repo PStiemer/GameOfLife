@@ -3,7 +3,7 @@
 <?php
 include "ClassLoader.php";
 $includer = new ClassLoader();
-$files = $includer->ClassLoader();
+$files = $includer->loadAll();
 
 $height = $_POST["height"];
 $width = $_POST["width"];
@@ -22,7 +22,7 @@ echo "<p>Ausgabeformat:</p>";
 foreach($files as $file)
 {
     $className = str_replace(".php", "", $file);
-    $outputPlugin = new $className($height, $width); //TODO: Constructor at this point unnecessary
+    $outputPlugin = new $className($height, $width);
     if ($outputPlugin instanceof BaseOutput)
     {
         $var = $outputPlugin->buttonName();
@@ -30,7 +30,7 @@ foreach($files as $file)
     }
     else
     {
-        echo "Fatal Error: Du dumme Nuss hast das OutputPlugin nicht von BaseOutput abgeleitet!";
+        echo "Fatal Error: Du hast das OutputPlugin nicht von BaseOutput abgeleitet!";
     }
 }
 ?>

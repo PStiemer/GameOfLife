@@ -1,20 +1,14 @@
 <?php
 class ClassLoader
 {
-    public function ClassLoader()
+    public function loadAll()
     {
         include_once "BaseOutput.php";
 
-        $dir = __DIR__ . "/OutputPlugins";
-        $allFiles = scandir($dir);
-        $files = array_diff($allFiles, array('.', '..'));
-        $i = 2;
-        do
+        foreach(glob("OutputPlugins/*.php") as $file)
         {
-            include_once "/OutputPlugins/" . $files[$i];
-            $i++;
+            include_once $file;
         }
-        while (isset($files[$i])) ;
-        return $files;
+        return str_replace("OutputPlugins/", "", glob("OutputPlugins/*.php"));
     }
 }
