@@ -1,3 +1,4 @@
+<head><title>Game of life</title></head>
 <?php
 include "ClassLoader.php";
 $includer = new ClassLoader();
@@ -5,6 +6,7 @@ $includer->loadAll();
 
 $height = $_POST["height"];
 $width = $_POST["width"];
+$numGeneration = $_POST["numGeneration"];
 
 if(isset($_POST["checkbox"]))
 {
@@ -28,13 +30,13 @@ else if (isset($_POST['APNG']))
     $output = new APNGOutput($height, $width);
 }
 
-function main($_startPos, $_height, $_width,$_output)
+function main($_startPos, $_height, $_width, $_output, $_numGeneration)
 {
     $initCells = fillArray($_startPos, $_height, $_width);
     $_output->processGeneration($initCells);
     $nextGen = scan($_height, $_width, $initCells);
 
-    for($generation=1; $generation < 65; $generation++) //number of generations. For debug purpose only
+    for($generation=1; $generation < $_numGeneration; $generation++)
     {
         $_output->processGeneration($nextGen);
         $nextGen = scan($_height, $_width, $nextGen);
@@ -130,4 +132,4 @@ function countNeighbors($_height, $_width, $_cells) //counts neighbors
     return $neighborCounter;
 }
 
-main($startPos, $height, $width, $output);
+main($startPos, $height, $width, $output, $numGeneration);

@@ -1,3 +1,4 @@
+<head><title>Game of life</title></head>
 <form action="GameOfLife.php" method="post">
     <p>Waehlen sie die Startpositionen:</p>
 <?php
@@ -7,7 +8,6 @@ $files = $includer->loadAll();
 
 $height = $_POST["height"];
 $width = $_POST["width"];
-
 echo "<input type=hidden name=height value=$height/><input type=hidden name=width value=$width/>";
 
 for($w = 0; $w < $width; $w++)
@@ -18,6 +18,9 @@ for($w = 0; $w < $width; $w++)
     }
     echo "<br />";
 }
+
+echo "<p>Anzahl der Generationen: <input type=text name=numGeneration /></p>";
+
 echo "<p>Ausgabeformat:</p>";
 foreach($files as $file)
 {
