@@ -1,11 +1,19 @@
 <?php
-include "BaseOutput.php";
-include "OutputPlugins/AsciiOutput.php";
-include "OutputPlugins/GifOutput.php";
+include "ClassLoader.php";
+$includer = new ClassLoader();
+$includer->loadAll();
+
 $height = $_POST["height"];
 $width = $_POST["width"];
-$startPos = $_POST["checkbox"];
 
+if(isset($_POST["checkbox"]))
+{
+    $startPos = $_POST["checkbox"];
+}
+else
+{
+    $startPos[0][0] = 0;
+}
 
 if (isset($_POST['Ascii']))
 {
