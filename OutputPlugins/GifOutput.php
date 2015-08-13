@@ -12,7 +12,7 @@ class GifOutput extends BaseOutput
 
         $this->gif = new dGifAnimator;
         $this->gif->setLoop(0);
-        $this->gif->setDefaultConfig('Delay_ms', '10');
+        $this->gif->setDefaultConfig('Delay_ms', '-1');
 
         $this->numberImages = 0;
         $this->height = $_height;
