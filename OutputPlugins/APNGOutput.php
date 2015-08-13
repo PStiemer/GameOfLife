@@ -1,6 +1,6 @@
 <?php
 
-class GifOutput extends BaseOutput
+class APNGOutput extends BaseOutput
 {
     private $numberImages;
     private $height;
@@ -8,11 +8,11 @@ class GifOutput extends BaseOutput
 
     function __construct($_height, $_width)
     {
-        require_once __DIR__ . "/../AnimationClasses/dGifAnimator.inc.php";
+        require_once __DIR__ . "/../AnimationClasses/APNG_Creator.php";
 
-        $this->gif = new dGifAnimator;
-        $this->gif->setLoop(0);
-        $this->gif->setDefaultConfig('Delay_ms', '10');
+        $this->animation = new APNG_Creator();
+        $this->animation->save_alpha = false;
+        $this->animation->save_time = false;
 
         $this->numberImages = 0;
         $this->height = $_height;
@@ -24,7 +24,7 @@ class GifOutput extends BaseOutput
 
     function buttonName()
     {
-        return "Gif";
+        return "APNG";
     }
 
     function processGeneration($_nextGen)
@@ -40,14 +40,14 @@ class GifOutput extends BaseOutput
                 }
             }
         }
-        imagegif($this->im, __DIR__. "/../images/". $this->numberImages . ".gif");
-        $this->gif->addFile(__DIR__ . "/../images/" . $this->numberImages . ".gif");
+        //imagepng($this->im, __DIR__. "/../images/". $this->numberImages . ".png");
+        $this->animation->add_image($this->im, null, 100, 0, 0);
         $this->numberImages++;
     }
 
     function finishOutput()
     {
-        $this->gif->build("FinishedOutput/finished.gif");
-        echo "<img src='FinishedOutput/finished.gif?" . uniqid() . "'><br />";
+        $this->animation->save("FinishedOutput/finished.png");
+        echo "<img src='FinishedOutput/finished.png?" . uniqid() . "'><br />";
     }
 }

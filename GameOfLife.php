@@ -23,6 +23,10 @@ else if (isset($_POST['Gif']))
 {
     $output = new GifOutput($height, $width);
 }
+else if (isset($_POST['APNG']))
+{
+    $output = new APNGOutput($height, $width);
+}
 
 function main($_startPos, $_height, $_width,$_output)
 {
@@ -30,7 +34,7 @@ function main($_startPos, $_height, $_width,$_output)
     $_output->processGeneration($initCells);
     $nextGen = scan($_height, $_width, $initCells);
 
-    for($generation=1; $generation < 30; $generation++) //number of generations. For debug purpose only
+    for($generation=1; $generation < 65; $generation++) //number of generations. For debug purpose only
     {
         $_output->processGeneration($nextGen);
         $nextGen = scan($_height, $_width, $nextGen);
