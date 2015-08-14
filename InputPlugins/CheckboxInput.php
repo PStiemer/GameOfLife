@@ -20,7 +20,7 @@ class CheckboxInput extends BaseInput
         echo "<p>Choose your starting positions:</p>";
         for ($w = 0; $w < $this->width; $w++) {
             for ($h = 0; $h < $this->height; $h++) {
-                echo "<input type=checkbox name=checkbox[$h][$w] value=X>";
+                echo "<input type=checkbox name=checkbox[$w][$h] value=X>";
             }
             echo "<br />";
         }

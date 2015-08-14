@@ -11,14 +11,9 @@ $numGeneration = $_POST["numGeneration"];
 
 session_start();
 $startPos = $_SESSION["startPos"];
-
 if(isset($_POST["checkbox"]))
 {
     $startPos = $_POST["checkbox"];
-}
-else
-{
-    $startPos[0][0] = "O";
 }
 
 foreach ($outputFiles as $file)
