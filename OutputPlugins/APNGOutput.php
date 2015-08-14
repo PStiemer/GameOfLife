@@ -18,8 +18,8 @@ class APNGOutput extends BaseOutput
 		$this->height = $_height;
 		$this->width = $_width;
 
-		$this->im = imagecreatetruecolor($this->height * 10, $this->width * 10);
-		$this->textColor = imagecolorallocate($this->im, 255, 255, 255);
+		$this->im = 0;
+		$this->textColor = 0;
 	}
 
 	function buttonName()
@@ -29,14 +29,15 @@ class APNGOutput extends BaseOutput
 
 	function processGeneration($_nextGen)
 	{
-		$this->im = imagecreatetruecolor($this->height * 10, $this->width * 10);
-		for ($x = 0; $x < $this->width; $x++)
+		$this->im = imagecreatetruecolor($this->width * 10, $this->height * 10);
+		$this->textColor = imagecolorallocate($this->im, 255, 255, 255);
+		for ($x = 0; $x < $this->height; $x++)
 		{
-			for ($y = 0; $y < $this->height; $y++)
+			for ($y = 0; $y < $this->width; $y++)
 			{
-				if ($_nextGen[$x][$y] == 1)
+				if ($_nextGen[$x][$y] == "X")
 				{
-					imagefilledrectangle($this->im, $x * 10, $y * 10, ($x + 1) * 10, ($y + 1) * 10, $this->textColor);
+					imagefilledrectangle($this->im, $y * 10, $x * 10, ($y + 1) * 10, ($x + 1) * 10, $this->textColor);
 				}
 			}
 		}
