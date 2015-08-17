@@ -13,6 +13,7 @@ class APNGOutput extends BaseOutput
 		$this->animation = new APNG_Creator();
 		$this->animation->save_alpha = false;
 		$this->animation->save_time = false;
+		$this->animation->transparent_color = array(255, 255, 255); //this color will be transparent
 
 		$this->numberImages = 0;
 		$this->height = $_height;
@@ -30,14 +31,14 @@ class APNGOutput extends BaseOutput
 	function processGeneration($_nextGen)
 	{
 		$this->im = imagecreatetruecolor($this->width * 10, $this->height * 10);
-		$this->textColor = imagecolorallocate($this->im, 255, 255, 255);
+		$white = imagecolorallocate($this->im, 255, 255, 255);
 		for ($x = 0; $x < $this->height; $x++)
 		{
 			for ($y = 0; $y < $this->width; $y++)
 			{
 				if ($_nextGen[$x][$y] == "X")
 				{
-					imagefilledrectangle($this->im, $y * 10, $x * 10, ($y + 1) * 10, ($x + 1) * 10, $this->textColor);
+					imagefilledrectangle($this->im, $y * 10, $x * 10, ($y + 1) * 10, ($x + 1) * 10, $white);
 				}
 			}
 		}

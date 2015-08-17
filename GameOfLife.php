@@ -10,11 +10,9 @@ $width = $_POST["width"];
 $numGeneration = $_POST["numGeneration"];
 
 session_start();
-$startPos = $_SESSION["startPos"];
-if(isset($_POST["checkbox"]))
-{
-    $startPos = $_POST["checkbox"];
-}
+if(isset($_SESSION["startPos"])) $startPos = $_SESSION["startPos"];
+if(isset($_POST["startPos"])) $startPos = $_POST["startPos"];
+
 
 foreach ($outputFiles as $file)
 {
@@ -63,7 +61,6 @@ function fillArray($_startPos, $_height, $_width)
 
 function scan($_height, $_width, $_cells) // checks the value of every cell and evaluates if someone dies, gets born or stays alive.
 {
-
     if(isset($nextGen))
     {
         unset($nextGen); // clearing the old status of nextGen because it only saves status changes and not the whole board
@@ -105,7 +102,6 @@ function scan($_height, $_width, $_cells) // checks the value of every cell and 
             }
         }
     }
-
     return $nextGen;
 }
 
