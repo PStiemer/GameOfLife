@@ -20,12 +20,12 @@ class AsciiOutput extends BaseOutput
     function processGeneration($_nextGen)
     {
         echo "<br />";
-        for ($x = 0; $x < $this->width; $x++)
+        for ($x = 0; $x < $this->height; $x++)
         {
             echo "<br />";
-            for ($y = 0; $y < $this->height; $y++)
+            for ($y = 0; $y < $this->width; $y++)
             {
-                if ($_nextGen[$x][$y] == 1)
+                if ($_nextGen[$x][$y] == "X")
                 {
                     echo "░";
                 }

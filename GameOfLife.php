@@ -2,46 +2,44 @@
 <?php
 include "ClassLoader.php";
 $includer = new ClassLoader();
-$includer->loadAll();
+$includer->loadInput();
+$outputFiles = $includer->loadOutput();
 
 $height = $_POST["height"];
 $width = $_POST["width"];
 $numGeneration = $_POST["numGeneration"];
 
-if(isset($_POST["checkbox"]))
+session_start();
+if(isset($_SESSION["startPos"])) $startPos = $_SESSION["startPos"];
+if(isset($_POST["startPos"])) $startPos = $_POST["startPos"];
+
+
+foreach ($outputFiles as $file)
 {
-    $startPos = $_POST["checkbox"];
-}
-else
-{
-    $startPos[0][0] = 0;
+    $className = str_replace(".php", "", $file);
+    $outputPlugin = new $className($height, $width);
+    if ($outputPlugin instanceof BaseOutput) {
+        $var = $outputPlugin->buttonName();
+        if(isset($_POST["$var"]))
+        {
+            $chosenOutputPlugin = new $className($height, $width);
+
+        }
+    }
 }
 
-if (isset($_POST['Ascii']))
-{
-    $output = new AsciiOutput($height, $width);
-}
-else if (isset($_POST['Gif']))
-{
-    $output = new GifOutput($height, $width);
-}
-else if (isset($_POST['APNG']))
-{
-    $output = new APNGOutput($height, $width);
-}
-
-function main($_startPos, $_height, $_width, $_output, $_numGeneration)
+function main($_startPos, $_height, $_width, $_chosenOutputPlugin, $_numGeneration)
 {
     $initCells = fillArray($_startPos, $_height, $_width);
-    $_output->processGeneration($initCells);
+    $_chosenOutputPlugin->processGeneration($initCells);
     $nextGen = scan($_height, $_width, $initCells);
 
     for($generation=1; $generation < $_numGeneration; $generation++)
     {
-        $_output->processGeneration($nextGen);
+        $_chosenOutputPlugin->processGeneration($nextGen);
         $nextGen = scan($_height, $_width, $nextGen);
     }
-    $_output->finishOutput();
+    $_chosenOutputPlugin->finishOutput();
 }
 
 
@@ -54,7 +52,7 @@ function fillArray($_startPos, $_height, $_width)
         {
             if (!isset($_startPos[$w][$h]))
             {
-                $_startPos[$w][$h] = 0;
+                $_startPos[$w][$h] = "O";
             }
         }
     }
@@ -63,7 +61,6 @@ function fillArray($_startPos, $_height, $_width)
 
 function scan($_height, $_width, $_cells) // checks the value of every cell and evaluates if someone dies, gets born or stays alive.
 {
-
     if(isset($nextGen))
     {
         unset($nextGen); // clearing the old status of nextGen because it only saves status changes and not the whole board
@@ -73,39 +70,38 @@ function scan($_height, $_width, $_cells) // checks the value of every cell and 
     {
         for($w = 0; $w < $_width; $w++)
         {
-            if($_cells[$h][$w] == 1)
+            if($_cells[$h][$w] == "X")
             {
                 $neighbors = countNeighbors($h, $w, $_cells);
 
                 if ($neighbors >= 0 && $neighbors < 2)
                 {
-                    $nextGen[$h][$w] = 0;
+                    $nextGen[$h][$w] = "O";
                 }
                 elseif ($neighbors == 2 || $neighbors == 3)
                 {
-                    $nextGen[$h][$w] = 1;
+                    $nextGen[$h][$w] = "X";
                 }
                 elseif ($neighbors > 3 && $neighbors < 9)
                 {
-                    $nextGen[$h][$w] = 0;
+                    $nextGen[$h][$w] = "O";
                 }
             }
-            elseif ($_cells[$h][$w] == 0)
+            elseif ($_cells[$h][$w] == "O")
             {
                 $neighbors = countNeighbors($h, $w, $_cells);
 
                 if ($neighbors == 3)
                 {
-                    $nextGen[$h][$w] = 1;
+                    $nextGen[$h][$w] = "X";
                 }
                 else
                 {
-                    $nextGen[$h][$w] = 0;
+                    $nextGen[$h][$w] = "O";
                 }
             }
         }
     }
-
     return $nextGen;
 }
 
@@ -113,23 +109,23 @@ function countNeighbors($_height, $_width, $_cells) //counts neighbors
 {
     $neighborCounter = 0;
 
-    if (isset($_cells[$_height - 1][$_width]) && $_cells[$_height - 1][$_width] == 1) $neighborCounter++; //up
+    if (isset($_cells[$_height - 1][$_width]) && $_cells[$_height - 1][$_width] == "X") $neighborCounter++; //up
 
-    if (isset($_cells[$_height - 1][$_width + 1]) && $_cells[$_height - 1][$_width + 1] == 1) $neighborCounter++; //up right
+    if (isset($_cells[$_height - 1][$_width + 1]) && $_cells[$_height - 1][$_width + 1] == "X") $neighborCounter++; //up right
 
-    if (isset($_cells[$_height][$_width + 1]) && $_cells[$_height][$_width + 1] == 1) $neighborCounter++; //right
+    if (isset($_cells[$_height][$_width + 1]) && $_cells[$_height][$_width + 1] == "X") $neighborCounter++; //right
 
-    if (isset($_cells[$_height + 1][$_width + 1]) && $_cells[$_height + 1][$_width + 1] == 1) $neighborCounter++; //down right
+    if (isset($_cells[$_height + 1][$_width + 1]) && $_cells[$_height + 1][$_width + 1] == "X") $neighborCounter++; //down right
 
-    if (isset($_cells[$_height + 1][$_width]) && $_cells[$_height + 1][$_width] == 1) $neighborCounter++; //down
+    if (isset($_cells[$_height + 1][$_width]) && $_cells[$_height + 1][$_width] == "X") $neighborCounter++; //down
 
-    if (isset($_cells[$_height + 1][$_width - 1]) && $_cells[$_height + 1][$_width - 1] == 1) $neighborCounter++; //down left
+    if (isset($_cells[$_height + 1][$_width - 1]) && $_cells[$_height + 1][$_width - 1] == "X") $neighborCounter++; //down left
 
-    if (isset($_cells[$_height][$_width - 1]) && $_cells[$_height][$_width - 1] == 1) $neighborCounter++; //left
+    if (isset($_cells[$_height][$_width - 1]) && $_cells[$_height][$_width - 1] == "X") $neighborCounter++; //left
 
-    if (isset($_cells[$_height-1][$_width - 1]) && $_cells[$_height-1][$_width - 1] == 1) $neighborCounter++; //left up
+    if (isset($_cells[$_height-1][$_width - 1]) && $_cells[$_height-1][$_width - 1] == "X") $neighborCounter++; //left up
 
     return $neighborCounter;
 }
 
-main($startPos, $height, $width, $output, $numGeneration);
+main($startPos, $height, $width, $chosenOutputPlugin, $numGeneration);
