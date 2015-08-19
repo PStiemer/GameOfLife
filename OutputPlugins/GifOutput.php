@@ -3,10 +3,8 @@
 class GifOutput extends BaseOutput
 {
     private $numberImages;
-    private $height;
-    private $width;
 
-    function __construct($_height, $_width)
+    function __construct()
     {
         require_once __DIR__ . "/../AnimationClasses/dGifAnimator.inc.php";
 
@@ -15,8 +13,6 @@ class GifOutput extends BaseOutput
         $this->gif->setDefaultConfig('Delay_ms', '-1');
 
         $this->numberImages = 0;
-        $this->height = $_height;
-        $this->width = $_width;
 
         $this->im = 0;
         $this->textColor = 0;
@@ -27,13 +23,13 @@ class GifOutput extends BaseOutput
         return "Gif";
     }
 
-    function processGeneration($_nextGen)
+    function processGeneration($_nextGen, $_height, $_width)
     {
-        $this->im = imagecreatetruecolor($this->width * 10, $this->height * 10);
+        $this->im = imagecreatetruecolor($_width * 10, $_height * 10);
         $this->textColor = imagecolorallocate($this->im, 255, 255, 255);
-        for ($x = 0; $x < $this->height; $x++)
+        for ($x = 0; $x < $_height; $x++)
         {
-            for ($y = 0; $y < $this->width; $y++)
+            for ($y = 0; $y < $_width; $y++)
             {
                 if ($_nextGen[$x][$y] == "X")
                 {
@@ -46,9 +42,9 @@ class GifOutput extends BaseOutput
         $this->numberImages++;
     }
 
-    function finishOutput()
+    function finishOutput($_saveDir)
     {
-        $this->gif->build("FinishedOutput/finished.gif");
-        echo "<img src='FinishedOutput/finished.gif?" . uniqid() . "'><br />";
+        $this->gif->build($_saveDir . ".gif");
+        header("LOCATION: testgif.php");
     }
 }

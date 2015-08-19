@@ -4,12 +4,12 @@ class TextfileInput extends BaseInput
 {
     private $matrixDimensions;
 
-    function __construct($_height, $_width)
+    function __construct()
     {
         BaseInput::__construct();
 
-        $this->height = $_height;
-        $this->width = $_width;
+        $this->height = 0;
+        $this->width = 0;
 
         $this->matrixDimensions;
     }
@@ -26,7 +26,7 @@ class TextfileInput extends BaseInput
             while (($line = fgets($handle)) !== false) {
                 $initCells[$this->height] = str_split($line);
                 $this->height++;
-                $this->width = strlen($line) -2;
+                $this->width = strlen($line);
             }
             fclose($handle);
         }

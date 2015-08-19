@@ -3,10 +3,8 @@
 class APNGOutput extends BaseOutput
 {
 	private $numberImages;
-	private $height;
-	private $width;
 
-	function __construct($_height, $_width)
+	function __construct()
 	{
 		require_once __DIR__ . "/../AnimationClasses/APNG_Creator.php";
 
@@ -16,8 +14,6 @@ class APNGOutput extends BaseOutput
 		$this->animation->transparent_color = array(255, 255, 255); //this color will be transparent
 
 		$this->numberImages = 0;
-		$this->height = $_height;
-		$this->width = $_width;
 
 		$this->im = 0;
 		$this->textColor = 0;
@@ -28,13 +24,13 @@ class APNGOutput extends BaseOutput
 		return "APNG";
 	}
 
-	function processGeneration($_nextGen)
+	function processGeneration($_nextGen, $_height, $_width)
 	{
-		$this->im = imagecreatetruecolor($this->width * 10, $this->height * 10);
+		$this->im = imagecreatetruecolor($_width * 10, $_height * 10);
 		$white = imagecolorallocate($this->im, 255, 255, 255);
-		for ($x = 0; $x < $this->height; $x++)
+		for ($x = 0; $x < $_height; $x++)
 		{
-			for ($y = 0; $y < $this->width; $y++)
+			for ($y = 0; $y < $_width; $y++)
 			{
 				if ($_nextGen[$x][$y] == "X")
 				{
@@ -46,9 +42,9 @@ class APNGOutput extends BaseOutput
 		$this->numberImages++;
 	}
 
-	function finishOutput()
+	function finishOutput($_saveDir)
 	{
-		$this->animation->save("FinishedOutput/finished.png");
-		echo "<img src='FinishedOutput/finished.png?" . uniqid() . "'><br />";
+		$this->animation->save($_saveDir . ".png");
+		header("LOCATION: testpng.php");
 	}
 }

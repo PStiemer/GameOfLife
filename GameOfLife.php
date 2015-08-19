@@ -1,131 +1,69 @@
-<head><title>Game of life</title></head>
 <?php
+
+include "Algorithm.php";
 include "ClassLoader.php";
 $includer = new ClassLoader();
 $includer->loadInput();
 $outputFiles = $includer->loadOutput();
 
-$height = $_POST["height"];
-$width = $_POST["width"];
-$numGeneration = $_POST["numGeneration"];
+if (isset($_POST["height"])) $height = $_POST["height"];
+if (isset($_POST["width"])) $width = $_POST["width"];
+if (isset($_POST["numGeneration"]))$numGeneration = $_POST["numGeneration"];
 
 session_start();
-if(isset($_SESSION["startPos"])) $startPos = $_SESSION["startPos"];
-if(isset($_POST["startPos"])) $startPos = $_POST["startPos"];
+if (isset($_SESSION["startPos"])) $startPos = $_SESSION["startPos"];
+if (isset($_POST["startPos"])) $startPos = $_POST["startPos"];
 
-
-foreach ($outputFiles as $file)
+if(!isset($argv))
 {
-    $className = str_replace(".php", "", $file);
-    $outputPlugin = new $className($height, $width);
-    if ($outputPlugin instanceof BaseOutput) {
-        $var = $outputPlugin->buttonName();
-        if(isset($_POST["$var"]))
-        {
-            $chosenOutputPlugin = new $className($height, $width);
-
-        }
-    }
-}
-
-function main($_startPos, $_height, $_width, $_chosenOutputPlugin, $_numGeneration)
-{
-    $initCells = fillArray($_startPos, $_height, $_width);
-    $_chosenOutputPlugin->processGeneration($initCells);
-    $nextGen = scan($_height, $_width, $initCells);
-
-    for($generation=1; $generation < $_numGeneration; $generation++)
+    foreach ($outputFiles as $file)
     {
-        $_chosenOutputPlugin->processGeneration($nextGen);
-        $nextGen = scan($_height, $_width, $nextGen);
-    }
-    $_chosenOutputPlugin->finishOutput();
-}
-
-
-
-function fillArray($_startPos, $_height, $_width)
-{
-    for ($w = 0; $w < $_height; $w++)
-    {
-        for($h = 0; $h < $_width; $h++)
+        $className = str_replace(".php", "", $file);
+        $outputPlugin = new $className();
+        if ($outputPlugin instanceof BaseOutput)
         {
-            if (!isset($_startPos[$w][$h]))
+            $var = $outputPlugin->buttonName();
+            if (isset($_POST["$var"]))
             {
-                $_startPos[$w][$h] = "O";
+                $chosenOutputPlugin = new $className();
             }
         }
     }
-    return $_startPos;
 }
 
-function scan($_height, $_width, $_cells) // checks the value of every cell and evaluates if someone dies, gets born or stays alive.
+if (isset($argv))
 {
-    if(isset($nextGen))
-    {
-        unset($nextGen); // clearing the old status of nextGen because it only saves status changes and not the whole board
-    }
-
-    for($h = 0; $h < $_height; $h++)
-    {
-        for($w = 0; $w < $_width; $w++)
-        {
-            if($_cells[$h][$w] == "X")
-            {
-                $neighbors = countNeighbors($h, $w, $_cells);
-
-                if ($neighbors >= 0 && $neighbors < 2)
-                {
-                    $nextGen[$h][$w] = "O";
-                }
-                elseif ($neighbors == 2 || $neighbors == 3)
-                {
-                    $nextGen[$h][$w] = "X";
-                }
-                elseif ($neighbors > 3 && $neighbors < 9)
-                {
-                    $nextGen[$h][$w] = "O";
-                }
-            }
-            elseif ($_cells[$h][$w] == "O")
-            {
-                $neighbors = countNeighbors($h, $w, $_cells);
-
-                if ($neighbors == 3)
-                {
-                    $nextGen[$h][$w] = "X";
-                }
-                else
-                {
-                    $nextGen[$h][$w] = "O";
-                }
-            }
+    $height = 0;
+    $width = 0;
+    $handle = fopen($argv[1], "r");
+    if ($handle) {
+        while (($line = fgets($handle)) !== false) {
+            $initCells[$height] = str_split($line);
+            $height++;
+            $width = strlen($line);
         }
+        fclose($handle);
     }
-    return $nextGen;
+    $outputPlugin = new $argv[4]($height, $width);
+    main($initCells, $height, $width, $outputPlugin, $argv[5], $argv[6]);
 }
-
-function countNeighbors($_height, $_width, $_cells) //counts neighbors
+else
 {
-    $neighborCounter = 0;
-
-    if (isset($_cells[$_height - 1][$_width]) && $_cells[$_height - 1][$_width] == "X") $neighborCounter++; //up
-
-    if (isset($_cells[$_height - 1][$_width + 1]) && $_cells[$_height - 1][$_width + 1] == "X") $neighborCounter++; //up right
-
-    if (isset($_cells[$_height][$_width + 1]) && $_cells[$_height][$_width + 1] == "X") $neighborCounter++; //right
-
-    if (isset($_cells[$_height + 1][$_width + 1]) && $_cells[$_height + 1][$_width + 1] == "X") $neighborCounter++; //down right
-
-    if (isset($_cells[$_height + 1][$_width]) && $_cells[$_height + 1][$_width] == "X") $neighborCounter++; //down
-
-    if (isset($_cells[$_height + 1][$_width - 1]) && $_cells[$_height + 1][$_width - 1] == "X") $neighborCounter++; //down left
-
-    if (isset($_cells[$_height][$_width - 1]) && $_cells[$_height][$_width - 1] == "X") $neighborCounter++; //left
-
-    if (isset($_cells[$_height-1][$_width - 1]) && $_cells[$_height-1][$_width - 1] == "X") $neighborCounter++; //left up
-
-    return $neighborCounter;
+    main($startPos, $height, $width, $chosenOutputPlugin, $numGeneration, "FinishedOutput/finished");
 }
 
-main($startPos, $height, $width, $chosenOutputPlugin, $numGeneration);
+
+function main($_startPos, $_height, $_width, $_chosenOutputPlugin, $_numGeneration, $_saveDir)
+    {
+        $myAlgorithm = new Algorithm();
+        $initCells = $myAlgorithm->fillArray($_startPos, $_height, $_width);
+        $_chosenOutputPlugin->processGeneration($initCells, $_height, $_width);
+        $nextGen = $myAlgorithm->scan($_height, $_width, $initCells);
+
+        for ($generation = 1; $generation < $_numGeneration; $generation++) {
+            $_chosenOutputPlugin->processGeneration($nextGen, $_height, $_width);
+            $nextGen = $myAlgorithm->scan($_height, $_width, $nextGen);
+        }
+        $_chosenOutputPlugin->finishOutput($_saveDir);
+    }
+

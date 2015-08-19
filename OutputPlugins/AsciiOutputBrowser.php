@@ -1,15 +1,10 @@
 <?php
 
 
-class AsciiOutput extends BaseOutput
+class AsciiOutputBrowser extends BaseOutput
 {
-    private $height;
-    private $width;
-
-    function __construct($_height, $_width)
+    function __construct()
     {
-        $this->height = $_height;
-        $this->width = $_width;
     }
 
     function buttonName()
@@ -17,13 +12,13 @@ class AsciiOutput extends BaseOutput
         return "Ascii";
     }
 
-    function processGeneration($_nextGen)
+    function processGeneration($_nextGen, $_height, $_width)
     {
         echo "<br />";
-        for ($x = 0; $x < $this->height; $x++)
+        for ($x = 0; $x < $_height; $x++)
         {
             echo "<br />";
-            for ($y = 0; $y < $this->width; $y++)
+            for ($y = 0; $y < $_width; $y++)
             {
                 if ($_nextGen[$x][$y] == "X")
                 {
@@ -37,8 +32,7 @@ class AsciiOutput extends BaseOutput
         }
     }
 
-    function finishOutput()
+    function finishOutput($_saveDir)
     {
-
     }
 }

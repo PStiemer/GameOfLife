@@ -1,9 +1,9 @@
 <?php
 abstract class BaseOutput
 {
-    abstract public function __construct($_height, $_width);
+    abstract public function __construct();
 
-    abstract function processGeneration($_nextGen);
+    abstract function processGeneration($_nextGen, $_height, $_width);
     abstract function buttonName();
-    abstract function finishOutput();
+    abstract function finishOutput($_saveDir);
 }
