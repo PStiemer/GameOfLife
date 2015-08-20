@@ -1,5 +1,5 @@
 <head><title>Game of life</title></head>
-<form action="GameOfLife.php" method="post">
+<form action="GameOfLifeHTML.php" method="post">
 <?php
 include "ClassLoader.php";
 $includer = new ClassLoader(0,0);

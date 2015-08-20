@@ -1,6 +1,11 @@
 <?php
 class ClassLoader
 {
+    function __construct()
+    {
+        include_once "vendor/autoload.php";
+    }
+
     public function loadOutput()
     {
         include_once "BaseOutput.php";

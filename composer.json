@@ -1,0 +1,15 @@
+{
+  "require": {
+    "ulrichsg/getopt-php": "2.3.0"
+  },
+  "name": "vendor_name/package_name",
+  "description": "description_text",
+  "minimum-stability": "dev",
+  "license": "MIT-License",
+  "authors": [
+    {
+      "name": "Pascal",
+      "email": "pascal.stiemer@cn-consult.eu"
+    }
+  ]
+}

@@ -46,7 +46,10 @@ class TextfileInput extends BaseInput
             $outputPlugin = new $className($this->height, $this->width);
             if ($outputPlugin instanceof BaseOutput) {
                 $var = $outputPlugin->buttonName();
-                echo "<input type=submit name=$var value=$var>";
+                if(isset($var))
+                {
+                    echo "<input type=submit name=$var value=$var>";
+                }
             }
         }
     }
