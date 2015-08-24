@@ -1,8 +1,12 @@
 <?PHP
 
+/**
+ * Class TextfileInput.
+ * InputPlugin that reads a textfile to get the startingpositions of the cells
+ */
 class TextfileInput extends BaseInput
 {
-    private $matrixDimensions;
+     private $matrixDimensions;
 
     function __construct()
     {
@@ -14,11 +18,20 @@ class TextfileInput extends BaseInput
         $this->matrixDimensions;
     }
 
+    /**
+     * echoes a text input field "Number of Generations"
+     */
     function numberOfGenerations()
     {
         echo "<p>Anzahl der Generationen: <input type=text name=numGeneration /></p>";
     }
 
+    /**
+     * @return 2-Dimensional array of living and dead cells
+     * reads inputfile.txt
+     * $height will become the number of lines
+     * $width will become the number of chars in a line
+     */
     function startingMatrix()
     {
         $handle = fopen("inputfile.txt", "r");
@@ -33,11 +46,17 @@ class TextfileInput extends BaseInput
         return $initCells;
     }
 
+    /**
+     * saves $height and $width in hidden fields so that it can be received via POST
+     */
     function getMatrixDimensions()
     {
         echo "<input type=hidden name=height value=$this->height/><input type=hidden name=width value=$this->width/>";
     }
 
+    /**
+     * generates buttons for the output type based off installed OutputPlugins
+     */
     function outputFormat()
     {
         echo "<p>Ausgabeformat:</p>";
@@ -54,6 +73,10 @@ class TextfileInput extends BaseInput
         }
     }
 
+    /**
+     * name of the InputPlugin-Button
+     * @return "Textfile"
+     */
     function buttonName()
     {
         return "Textfile";

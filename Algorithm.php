@@ -1,6 +1,19 @@
 <?PHP
+
+/**
+ * Class Algorithm
+ * contains the algorithm to calculate the outcome of the next generation
+ */
 class Algorithm
 {
+    /**
+     * @param $_startPos
+     * @param $_height
+     * @param $_width
+     * @return 2 dimensional Array that contains the starting Position
+     *
+     * fills the empty positions with dead cells because the $_startPos only contains the positions of living cells and nothing else
+     */
     function fillArray($_startPos, $_height, $_width)
     {
         for ($w = 0; $w < $_height; $w++) {
@@ -13,6 +26,14 @@ class Algorithm
         return $_startPos;
     }
 
+    /**
+     * @param $_height
+     * @param $_width
+     * @param $_cells
+     * @return int number of neighbors
+     *
+     * counts living neighbors from current position
+     */
     function countNeighbors($_height, $_width, $_cells) //counts neighbors
     {
         $neighborCounter = 0;
@@ -37,7 +58,15 @@ class Algorithm
 
     }
 
-    function scan($_height, $_width, $_cells) // checks the value of every cell and evaluates if someone dies, gets born or stays alive.
+    /**
+     * @param $_height
+     * @param $_width
+     * @param $_cells
+     * @return Array with the next generation of cells
+     *
+     * checks the value of every cell and evaluates if someone dies, gets born or stays alive.
+     */
+    function scan($_height, $_width, $_cells)
     {
         if (isset($nextGen)) {
             unset($nextGen); // clearing the old status of nextGen because it only saves status changes and not the whole board

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class APNGOutput
+ * OutputPlugin to generate an Animated PNG where living cells are transparent
+ */
 class APNGOutput extends BaseOutput
 {
 	private $numberImages;
@@ -19,11 +23,24 @@ class APNGOutput extends BaseOutput
 		$this->textColor = 0;
 	}
 
+    /**
+     * name of the OuttputPlugin-Button
+     * @return "APNG"
+     */
 	function buttonName()
 	{
 		return "APNG";
 	}
 
+    /**
+     * @param $_nextGen
+     * @param $_height
+     * @param $_width
+     *
+     * Creates a black Image with the size of $_width*10 * $_heigth*10
+     * draws a transparent rectangle for each living cell where one cell is 10 +10 in size
+     * adds the image to the APNG
+     */
 	function processGeneration($_nextGen, $_height, $_width)
 	{
 		$this->im = imagecreatetruecolor($_width * 10, $_height * 10);
@@ -42,6 +59,10 @@ class APNGOutput extends BaseOutput
 		$this->numberImages++;
 	}
 
+    /**
+     * @param $_saveDir. is the directory in which the APNG will be saved
+     * saves the image and opens it in a browser
+     */
 	function finishOutput($_saveDir)
 	{
 		$this->animation->save($_saveDir . ".png");

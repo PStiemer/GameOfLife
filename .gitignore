@@ -7,3 +7,5 @@
 /composer.phar
 /.png
 /vendor
+/html
+/DoxygenOutput

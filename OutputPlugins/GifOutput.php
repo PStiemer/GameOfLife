@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class GifOutput
+ * OutputPlugin to generate an Animated GIF
+ */
 class GifOutput extends BaseOutput
 {
     private $numberImages;
@@ -18,11 +22,24 @@ class GifOutput extends BaseOutput
         $this->textColor = 0;
     }
 
+    /**
+     * name of the OuttputPlugin-Button
+     * @return "Gif"
+     */
     function buttonName()
     {
         return "Gif";
     }
 
+    /**
+     * @param $_nextGen
+     * @param $_height
+     * @param $_width
+     *
+     * Creates a black Image with the size of $_width*10 * $_heigth*10
+     * draws a white rectangle for each living cell where one cell is 10 +10 in size
+     * saves the image in the image folder with the generation number in the filename
+     */
     function processGeneration($_nextGen, $_height, $_width)
     {
         $this->im = imagecreatetruecolor($_width * 10, $_height * 10);
@@ -42,6 +59,10 @@ class GifOutput extends BaseOutput
         $this->numberImages++;
     }
 
+    /**
+     * @param $_saveDir. is the directory in which the Gif will be saved
+     * saves the image and opens it in a browser
+     */
     function finishOutput($_saveDir)
     {
         $this->gif->build($_saveDir . ".gif");

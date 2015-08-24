@@ -16,6 +16,5 @@ foreach ($files as $file) {
         echo "<input type=submit name=$var value=$var>";
         echo "</form>";
     }
-
 }
 ?>
